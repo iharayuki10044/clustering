@@ -5,6 +5,11 @@ Clustering::Clustering(void)
 
 }
 
+void Clustering::executor(void)
+{
+    std::cout << "kk" << std::endl;
+}
+
 double Clustering::cal_distance_2d(Cluster cluster_a, Cluster cluster_b)
 {
     double distance;
@@ -13,10 +18,10 @@ double Clustering::cal_distance_2d(Cluster cluster_a, Cluster cluster_b)
     return distance;
 }
 
-int main(void)
+int main(int argc, char** argv)
 {
     Clustering clustering;
-    clustering.executor;
+    clustering.executor();
 
     return 0;
 }
