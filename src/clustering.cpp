@@ -1,16 +1,11 @@
-#include "include/clustering.h"
+#include "clustering/clustering.hpp"
 
-Cluster::Cluster(void)
+Clustering::Clustering(void)
 {
 
 }
 
-Cluster::Clusterring(void)
-{
-
-}
-
-Cluster::cal_distance_2d(Cluster &cluster_a, Cluster &cluster_b)
+double Clustering::cal_distance_2d(Cluster cluster_a, Cluster cluster_b)
 {
     double distance;
     distance = sqrt( (cluster_a.point_x - cluster_b.point_x)*(cluster_a.point_x - cluster_b.point_x) 
@@ -20,7 +15,7 @@ Cluster::cal_distance_2d(Cluster &cluster_a, Cluster &cluster_b)
 
 int main(void)
 {
-    Cluster clustering;
+    Clustering clustering;
     clustering.executor;
 
     return 0;

@@ -1,10 +1,10 @@
 #ifndef __CLUSTERING_H_
 #define __CLUSTERING_H_
 
-#include 
-#include "Eigen/Core"
-#include "Eigen/Dense"
-#include "Eigen/LU"
+#include <iostream>
+#include <string>
+#include <vector>
+
 //#include "Eigen/Geometry"
 
 class Clustering
@@ -25,7 +25,7 @@ class Cluster
 
     Clustering(void);
 
-    void Clustering_executor();
+    void executor(void);
     double cal_distance_2d(const Cluster,const Cluster);
 
 private:

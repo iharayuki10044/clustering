@@ -17,4 +17,8 @@ endif()
 
 SET(CMAKE_BUILD_TYPE "Release")
 
-add_executable(clustering.out src/clustering.cpp)
+include_directories(
+  include
+)
+
+add_subdirectory(src)
