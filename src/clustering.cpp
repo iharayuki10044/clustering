@@ -102,7 +102,6 @@ void Clustering::simple_clustering(Clusters& input_data, std::vector<double> clu
     std::vector<double> serchi_result;
     std::vector<int> cluster_id_array;
     int serchi_result_id;
-    int counter =0;
 
     while (true){
         serchi_result = Clustering::serch_min_distance(cluster_distance);
@@ -120,14 +119,9 @@ void Clustering::simple_clustering(Clusters& input_data, std::vector<double> clu
 
         std::cout << " " << input_data[0].cluster_id << " " <<input_data[1].cluster_id<< " " <<input_data[2].cluster_id<< " " <<input_data[3].cluster_id << " " <<input_data[4].cluster_id<<std::endl;
 
-        if(threshold < serchi_result[0]){
+        if(threshold <= serchi_result[0]){
             break;
         }
-        if(counter > 100){
-            break;
-        }
-        counter++;
-        
         // std::cout << "serchi reslut size = " << serchi_result.size()<< std::endl;
         // std::cout << "mindis = " << serchi_result[0] << " index = " << serchi_result[1] << std::endl;
 
