@@ -26,8 +26,8 @@ class Cluster
 
     Clustering(void);
 
-    void executor(void);
-    void formattor(void);
+    void executor(const double);
+    void formattor(const double);
     void data_inputter(std::string, Clusters& input_data, int&, int&);
     void cal_cluster_distance(Clusters& input_data, const int, const int, std::vector<double>&);
     void simple_clustering(Clusters& input_data, std::vector<double>);

@@ -5,20 +5,20 @@ Clustering::Clustering(void)
 
 }
 
-void Clustering::executor(void)
+void Clustering::executor(const double command_line)
 {
-    Clustering::formattor();
+    Clustering::formattor(command_line);
     Clustering::data_inputter(input_file_name, input_data, input_data_dim, input_data_num);
     Clustering::cal_cluster_distance(input_data, input_data_dim, input_data_num, cluster_distance);
     Clustering::simple_clustering(input_data, cluster_distance);
 }
 
-void Clustering::formattor(void)
+void Clustering::formattor(const double input)
 {
     input_file_name = "../../dataset/input_data_file.csv";
     input_data.clear();
     cluster_distance.clear();
-    threshold = 5;
+    threshold = input;
 }
 
 void Clustering::data_inputter(std::string input_data_file, Clusters& input_data, int &input_data_dim, int &input_data_num)
@@ -134,7 +134,7 @@ std::vector<double> Clustering::serch_min_distance(std::vector<double> &cluster_
     double min_index = -1;
     for(int i=0; i<cluster_distance.size(); i++){
 
-        std::cout << "cluster array " << i << " = "<<cluster_distance[i]<<std::endl; 
+        // std::cout << "cluster array " << i << " = "<<cluster_distance[i]<<std::endl; 
 
         if(cluster_distance[i] >= 0){
             if(min_dis >= cluster_distance[i]){
@@ -179,10 +179,13 @@ void Clustering::change_id(Clusters &input_data, const std::vector<int> pair_id)
     input_data[pair_id[1]].cluster_id = input_data[pair_id[0]].cluster_id;
 }
 
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
     Clustering clustering;
-    clustering.executor();
+
+    double threshold = std::stod(argv[1]);
+
+    clustering.executor(threshold);
 
     return 0;
 }
