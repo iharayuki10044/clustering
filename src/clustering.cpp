@@ -9,11 +9,9 @@ void Clustering::executor(void)
 {
     Clustering::formattor();
     Clustering::data_inputter(input_file_name, input_data, input_data_dim, input_data_num);
-    Clustering::cal_cluster_distance(input_data, input_data_dim, input_data_num);
+    Clustering::cal_cluster_distance(input_data, input_data_dim, input_data_num, cluster_distance);
+    Clustering::simple_clustering(input_data, cluster_distance);
 
-    for(int i = 0; i < cluster_distance.size();i++){
-        std::cout<< cluster_distance[i] << std::endl;
-    }
 }
 
 void Clustering::formattor(void)
@@ -84,7 +82,7 @@ double Clustering::cal_distance(Cluster cluster_a, Cluster cluster_b, const int 
     return sqrt(distance);
 }
 
-void Clustering::cal_cluster_distance(Clusters& input_data, int input_data_dim,int input_data_num)
+void Clustering::cal_cluster_distance(Clusters& input_data, int input_data_dim,int input_data_num, std::vector<double> &cluster_distance)
 {
     for(int i=0;i<input_data_num;i++){
         input_data[i].distance.clear();
@@ -96,6 +94,41 @@ void Clustering::cal_cluster_distance(Clusters& input_data, int input_data_dim,i
         // std::cout <<"cluster" << std::endl <<i << " & " << j << std::endl;
         // std::cout <<"cal dis = " << input_data[i].distance[j-i-1] <<" sin dis = "<<distance << std::endl;
         }
+    }
+}
+
+void Clustering::simple_clustering(Clusters& input_data, std::vector<double> cluster_distance)
+{
+    std::vector<double> result;
+    result = Clustering::serch_min_distance(cluster_distance);
+    
+    std::cout << "mindis = " << result[0] << " index = " << result[1] << std::endl;
+}
+
+std::vector<double> Clustering::serch_min_distance(std::vector<double> cluster_distance)
+{
+    double min_dis = cluster_distance[0];
+    double min_index = -1;
+    for(int i=1; i<cluster_distance.size(); i++){
+        if(min_dis > cluster_distance[i]){
+            min_dis = cluster_distance[i];
+            min_index = i;
+        }
+    }
+
+    std::vector<double> result;
+    result.clear();
+    result.push_back(min_dis);
+    result.push_back(min_index);
+    return result;
+}
+
+std::vector<int> Clustering::get_id_from_distance_arry_id(int index)
+{
+    int index_minus = input_data_num -1;
+    while(true){
+        int id = index - index_minus; 
+    
     }
 }
 
