@@ -34,7 +34,8 @@ class Cluster
     std::vector<std::string> split_string(std::string& input, char delimiter);
     double cal_distance(const Cluster,const Cluster,const int);
     std::vector<double> serch_min_distance(std::vector<double>);
-    std::vector<int> get_id_from_distance_arry_id(const int);
+    std::vector<int> get_id_from_distance_array_id(const int);
+    void change_id(Clusters& input_data, const std::vector<int>);
 
 private:
     int input_data_num;
