@@ -1,6 +1,7 @@
 #ifndef __CLUSTERING_H_
 #define __CLUSTERING_H_
 
+#include 
 #include "Eigen/Core"
 #include "Eigen/Dense"
 #include "Eigen/LU"
@@ -23,9 +24,9 @@ class Cluster
     typedef std::vector<Cluster> Clusters;
 
     Clustering(void);
-    Clustering_executor();
-    cal_distance_2d(Cluster, Cluster);
 
+    void Clustering_executor();
+    double cal_distance_2d(const Cluster,const Cluster);
 
 private:
     int input_data_num;
