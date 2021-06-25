@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <fstream>
+#include <sstream>
 
 //#include "Eigen/Geometry"
 
@@ -15,10 +17,7 @@ public:
 class Cluster
     {
     public:
-        int index_x;
-        int index_y;
-        double point_x;
-        double point_y;
+        std::vector<double> point;
         int cluster_id;
     private:
     };
@@ -27,12 +26,18 @@ class Cluster
     Clustering(void);
 
     void executor(void);
+    void formattor(void);
+    void data_inputter(std::string, Clusters& input_data, int&, int&);
     void simple_cluster(Clusters& input_data);
-    double cal_distance_2d(const Cluster,const Cluster);
+    std::vector<std::string> split_string(std::string& input, char delimiter);
+    double cal_distance_2d(const Cluster,const Cluster,const int);
 
 private:
     int input_data_num;
-    
+    int input_dim;
+    std::string input_file_name;
+
+    Clusters input_data;
     
     
 };
