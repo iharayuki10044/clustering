@@ -9,13 +9,18 @@ void Clustering::executor(void)
 {
     Clustering::formattor();
     Clustering::data_inputter(input_file_name, input_data, input_data_dim, input_data_num);
-    Clustering::simple_clustering(input_data, input_data_dim, input_data_num);
+    Clustering::cal_cluster_distance(input_data, input_data_dim, input_data_num);
+
+    for(int i = 0; i < cluster_distance.size();i++){
+        std::cout<< cluster_distance[i] << std::endl;
+    }
 }
 
 void Clustering::formattor(void)
 {
     input_file_name = "../../dataset/input_data_file.csv";
     input_data.clear();
+    cluster_distance.clear();
 }
 
 void Clustering::data_inputter(std::string input_data_file, Clusters& input_data, int &input_data_dim, int &input_data_num)
@@ -30,7 +35,7 @@ void Clustering::data_inputter(std::string input_data_file, Clusters& input_data
     while(std::getline(ifs, line)){
         std::vector<std::string> point= Clustering::split_string(line, ',');
 
-        std::cout << "input data num = " << i <<std::endl;
+        // std::cout << "input data num = " << i <<std::endl;
         temp_data.point.clear();
         std::vector<double> coordinate;
         coordinate.clear();
@@ -44,11 +49,11 @@ void Clustering::data_inputter(std::string input_data_file, Clusters& input_data
             if(i==0){
                 input_data_dim = j +1;
             }
-            std::cout << std::endl;
         }
 
-        std::cout << "input data 0 = " << temp_data.point[0] << std::endl;
-        std::cout << "input data 1 = " << temp_data.point[1] << std::endl;
+        //for debag
+        // std::cout << "input data 0 = " << temp_data.point[0] << std::endl;
+        // std::cout << "input data 1 = " << temp_data.point[1] << std::endl;
 
         input_data.push_back(temp_data);
         i++;
@@ -79,18 +84,17 @@ double Clustering::cal_distance(Cluster cluster_a, Cluster cluster_b, const int 
     return sqrt(distance);
 }
 
-void Clustering::simple_clustering(Clusters& input_data, int input_data_dim,int input_data_num)
+void Clustering::cal_cluster_distance(Clusters& input_data, int input_data_dim,int input_data_num)
 {
     for(int i=0;i<input_data_num;i++){
         input_data[i].distance.clear();
         for(int j=i+1;j<input_data_num;j++){
-
         double distance = cal_distance(input_data[i], input_data[j], input_data_dim);
         input_data[i].distance.push_back(cal_distance(input_data[i], input_data[j], input_data_dim));
-
-        std::cout <<"cluster" << std::endl <<i << " & " << j << std::endl
-        std::cout <<"cal dis = " << input_data[i].distance[j-i-1] <<" sin dis = "<<distance << std::endl;
-
+        cluster_distance.push_back(distance);
+        // for debag
+        // std::cout <<"cluster" << std::endl <<i << " & " << j << std::endl;
+        // std::cout <<"cal dis = " << input_data[i].distance[j-i-1] <<" sin dis = "<<distance << std::endl;
         }
     }
 }
