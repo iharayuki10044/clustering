@@ -136,14 +136,14 @@ void Clustering::simple_clustering(Clusters& input_data, std::vector<double> clu
 
 std::vector<double> Clustering::serch_min_distance(std::vector<double> &cluster_distance)
 {
-    double min_dis = cluster_distance[0];
+    double min_dis = threshold;
     double min_index = -1;
-    for(int i=1; i<cluster_distance.size(); i++){
+    for(int i=0; i<cluster_distance.size(); i++){
 
-        // std::cout << "cluster array " << i << " = "<<cluster_distance[i]<<std::endl; 
+        std::cout << "cluster array " << i << " = "<<cluster_distance[i]<<std::endl; 
 
-        if(cluster_distance[i] > 0){
-            if(min_dis > cluster_distance[i]){
+        if(cluster_distance[i] >= 0){
+            if(min_dis >= cluster_distance[i]){
                 min_dis = cluster_distance[i];
                 min_index = i;
                 cluster_distance[i] = cluster_distance[i] *-1;
