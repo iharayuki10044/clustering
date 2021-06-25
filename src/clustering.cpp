@@ -99,10 +99,18 @@ void Clustering::cal_cluster_distance(Clusters& input_data, int input_data_dim,i
 
 void Clustering::simple_clustering(Clusters& input_data, std::vector<double> cluster_distance)
 {
-    std::vector<double> result;
-    result = Clustering::serch_min_distance(cluster_distance);
+    std::vector<double> serchi_result;
+    std::vector<int> cluster_id_array;
+    int serchi_result_id;
     
-    std::cout << "mindis = " << result[0] << " index = " << result[1] << std::endl;
+    serchi_result = Clustering::serch_min_distance(cluster_distance);
+    serchi_result_id = serchi_result[1];
+
+    std::cout << "mindis = " << serchi_result[0] << " index = " << serchi_result[1] << std::endl;
+
+    cluster_id_array = Clustering::get_id_from_distance_arry_id(serchi_result_id);
+    std::cout << "id_ " << cluster_id_array[0]<< " & "<<" id_ " <<cluster_id_array[1]<<std::endl;
+
 }
 
 std::vector<double> Clustering::serch_min_distance(std::vector<double> cluster_distance)
@@ -125,11 +133,23 @@ std::vector<double> Clustering::serch_min_distance(std::vector<double> cluster_d
 
 std::vector<int> Clustering::get_id_from_distance_arry_id(int index)
 {
-    int index_minus = input_data_num -1;
+    std::vector<int> result;
+    int index_minus = input_data_num -2;
+    int counter = 0;
     while(true){
-        int id = index - index_minus; 
-    
+        if(index - index_minus < 1){
+            result.push_back(counter);
+            result.push_back(index +counter *1 +1);
+            break;
+        }
+        else{
+            index_minus = index_minus +1;
+            index = index - index_minus;
+            index_minus = index_minus -2;
+            counter++;
+        }
     }
+    return result;
 }
 
 int main(int argc, char** argv)
