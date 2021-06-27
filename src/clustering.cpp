@@ -9,6 +9,9 @@ void Clustering::executor(const double command_line)
 {
     Clustering::formattor(command_line);
     Clustering::data_inputter(input_file_name, input_data, input_data_dim, input_data_num);
+
+    std::cout << "cluster num = " << cluster_num.size() << std::endl;
+
     Clustering::cal_cluster_distance(input_data, input_data_dim, input_data_num, cluster_distance);
     Clustering::simple_clustering(input_data, cluster_distance);
 }
@@ -18,6 +21,7 @@ void Clustering::formattor(const double input)
     input_file_name = "../../dataset/input_data_file.csv";
     input_data.clear();
     cluster_distance.clear();
+    cluster_num.clear();
     threshold = input;
 }
 
@@ -54,6 +58,7 @@ void Clustering::data_inputter(std::string input_data_file, Clusters& input_data
         // std::cout << "input data 1 = " << temp_data.point[1] << std::endl;
 
         input_data.push_back(temp_data);
+        cluster_num.push_back(1);
         i++;
     }
 
@@ -110,12 +115,12 @@ void Clustering::simple_clustering(Clusters& input_data, std::vector<double> clu
         // std::cout << "mindis = " << serchi_result[0] << " index = " << serchi_result[1] << std::endl;
 
         cluster_id_array = Clustering::get_id_from_distance_array_id(serchi_result_id);
-        std::cout << "id_ " << cluster_id_array[0]<< " & "<<" id_ " <<cluster_id_array[1]<<std::endl;
+        // std::cout << "id_ " << cluster_id_array[0]<< " & "<<" id_ " <<cluster_id_array[1]<<std::endl;
 
         Clustering::change_id(input_data, cluster_id_array);
 
-        std::cout << "clustering"<<std::endl;
-        std::cout << "id_ " << input_data[cluster_id_array[0]].cluster_id << " & "<<" id_ " <<input_data[cluster_id_array[1]].cluster_id<<std::endl;
+        // std::cout << "clustering"<<std::endl;
+        // std::cout << "id_ " << input_data[cluster_id_array[0]].cluster_id << " & "<<" id_ " <<input_data[cluster_id_array[1]].cluster_id<<std::endl;
 
         std::cout << " " << input_data[0].cluster_id << " " <<input_data[1].cluster_id<< " " <<input_data[2].cluster_id<< " " <<input_data[3].cluster_id << " " <<input_data[4].cluster_id<<std::endl;
 
@@ -145,11 +150,11 @@ std::vector<double> Clustering::serch_min_distance(std::vector<double> &cluster_
         }
     }
 
-    cluster_distance[min_index] = cluster_distance[min_index] *-1;
     std::vector<double> result;
     result.clear();
     result.push_back(min_dis);
     result.push_back(min_index);
+    cluster_distance[min_index] = cluster_distance[min_index] *-1;
     return result;
 }
 
@@ -176,7 +181,35 @@ std::vector<int> Clustering::get_id_from_distance_array_id(int index)
 
 void Clustering::change_id(Clusters &input_data, const std::vector<int> pair_id)
 {
-    input_data[pair_id[1]].cluster_id = input_data[pair_id[0]].cluster_id;
+    if(cluster_num[pair_id[0]] >= cluster_num[pair_id[1]]){
+        for(int i=0; i<input_data.size();i++){
+            if((input_data[i].cluster_id == input_data[pair_id[1]].cluster_id)&&(input_data[i].cluster_id != input_data[pair_id[0]].cluster_id)){
+                input_data[i].cluster_id = input_data[pair_id[0]].cluster_id;
+            }
+        }
+    }
+    else{
+        int change_id_counter=0;
+        for(int i=0; i<input_data.size();i++){
+            if((input_data[i].cluster_id == input_data[pair_id[0]].cluster_id)&&(input_data[i].cluster_id != input_data[pair_id[0]].cluster_id)){
+                input_data[i].cluster_id = input_data[pair_id[1]].cluster_id;
+            }
+        }
+    }
+
+    for(int i=0; i<cluster_num.size();i++){
+        cluster_num[i]=0;
+    }
+    for(int i=0; i<input_data.size();i++){
+        cluster_num[input_data[i].cluster_id]++;
+    }
+
+    std::cout << "==cluster num==" << std::endl;
+    for(int i=0 ; i<cluster_num.size() ; i++){
+        std::cout <<" " << cluster_num[i] << " " ; 
+    }
+    std::cout<<std::endl;
+
 }
 
 int main(int argc, char* argv[])

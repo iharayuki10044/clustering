@@ -43,6 +43,7 @@ private:
     double threshold;
     std::string input_file_name;
     std::vector<double> cluster_distance;
+    std::vector<int> cluster_num;
 
     Clusters input_data;
     
