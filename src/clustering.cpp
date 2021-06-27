@@ -8,11 +8,11 @@ Clustering::Clustering(void)
 void Clustering::executor(const double command_line)
 {
     Clustering::formattor(command_line);
-    Clustering::data_inputter(input_file_name, input_data, input_data_dim, input_data_num);
+    Clustering::data_inputter(input_file_name, input_data, input_data_dim);
 
     std::cout << "cluster num = " << cluster_num.size() << std::endl;
 
-    Clustering::cal_cluster_distance(input_data, input_data_dim, input_data_num, cluster_distance);
+    Clustering::cal_cluster_distance(input_data, input_data_dim, cluster_distance);
     Clustering::simple_clustering(input_data, cluster_distance);
 }
 
@@ -25,7 +25,7 @@ void Clustering::formattor(const double input)
     threshold = input;
 }
 
-void Clustering::data_inputter(std::string input_data_file, Clusters& input_data, int &input_data_dim, int &input_data_num)
+void Clustering::data_inputter(std::string input_data_file, Clusters& input_data, int &input_data_dim)
 {
     std::ifstream ifs(input_data_file);
     if(!ifs){
@@ -61,8 +61,6 @@ void Clustering::data_inputter(std::string input_data_file, Clusters& input_data
         cluster_num.push_back(1);
         i++;
     }
-
-    input_data_num = i;
 }
 
 std::vector<std::string> Clustering::split_string(std::string& input, char delimiter)
@@ -87,11 +85,11 @@ double Clustering::cal_distance(Cluster cluster_a, Cluster cluster_b, const int 
     return sqrt(distance);
 }
 
-void Clustering::cal_cluster_distance(Clusters& input_data, int input_data_dim,int input_data_num, std::vector<double> &cluster_distance)
+void Clustering::cal_cluster_distance(Clusters& input_data, int input_data_dim, std::vector<double> &cluster_distance)
 {
-    for(int i=0;i<input_data_num;i++){
+    for(int i=0;i<input_data.size();i++){
         input_data[i].distance.clear();
-        for(int j=i+1;j<input_data_num;j++){
+        for(int j=i+1;j<input_data.size();j++){
         double distance = cal_distance(input_data[i], input_data[j], input_data_dim);
         input_data[i].distance.push_back(cal_distance(input_data[i], input_data[j], input_data_dim));
         cluster_distance.push_back(distance);
@@ -109,7 +107,7 @@ void Clustering::simple_clustering(Clusters& input_data, std::vector<double> clu
     int serchi_result_id;
 
     while (true){
-        serchi_result = Clustering::serch_min_distance(cluster_distance);
+        serchi_result = Clustering::serchi_min_distance(cluster_distance);
         serchi_result_id = serchi_result[1];
 
         // std::cout << "mindis = " << serchi_result[0] << " index = " << serchi_result[1] << std::endl;
@@ -127,13 +125,16 @@ void Clustering::simple_clustering(Clusters& input_data, std::vector<double> clu
         if(threshold <= serchi_result[0]){
             break;
         }
+        if(cluster_num[0] == input_data.size()){
+            break;
+        }
         // std::cout << "serchi reslut size = " << serchi_result.size()<< std::endl;
         // std::cout << "mindis = " << serchi_result[0] << " index = " << serchi_result[1] << std::endl;
 
     }
 }
 
-std::vector<double> Clustering::serch_min_distance(std::vector<double> &cluster_distance)
+std::vector<double> Clustering::serchi_min_distance(std::vector<double> &cluster_distance)
 {
     double min_dis = threshold;
     double min_index = -1;
@@ -155,13 +156,20 @@ std::vector<double> Clustering::serch_min_distance(std::vector<double> &cluster_
     result.push_back(min_dis);
     result.push_back(min_index);
     cluster_distance[min_index] = cluster_distance[min_index] *-1;
+
+    for(int i=0;i<cluster_distance.size();i++){
+        if(result[1] > cluster_distance[i]){
+            cluster_distance[i] = cluster_distance[i] *1; 
+        }
+    }
+
     return result;
 }
 
 std::vector<int> Clustering::get_id_from_distance_array_id(int index)
 {
     std::vector<int> result;
-    int index_minus = input_data_num -2;
+    int index_minus = input_data.size() -2;
     int counter = 0;
     while(true){
         if(index - index_minus < 1){

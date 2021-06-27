@@ -28,17 +28,16 @@ class Cluster
 
     void executor(const double);
     void formattor(const double);
-    void data_inputter(std::string, Clusters& input_data, int&, int&);
-    void cal_cluster_distance(Clusters& input_data, const int, const int, std::vector<double>&);
+    void data_inputter(std::string, Clusters& input_data, int&);
+    void cal_cluster_distance(Clusters& input_data, const int, std::vector<double>&);
     void simple_clustering(Clusters& input_data, std::vector<double>);
     std::vector<std::string> split_string(std::string& input, char delimiter);
     double cal_distance(const Cluster,const Cluster,const int);
-    std::vector<double> serch_min_distance(std::vector<double>&);
+    std::vector<double> serchi_min_distance(std::vector<double>&);
     std::vector<int> get_id_from_distance_array_id(const int);
     void change_id(Clusters& input_data, const std::vector<int>);
 
 private:
-    int input_data_num;
     int input_data_dim;
     double threshold;
     std::string input_file_name;
@@ -46,8 +45,6 @@ private:
     std::vector<int> cluster_num;
 
     Clusters input_data;
-    
-    
 };
 
 #endif
