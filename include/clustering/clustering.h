@@ -37,6 +37,11 @@ class Cluster
     std::vector<int> get_id_from_distance_array_id(const int);
     void change_id(Clusters& input_data, const std::vector<int>);
 
+    void full_clustering(Clusters& input_data, std::vector<double>&);
+    std::vector<double> serchi_min_max_distance(std::vector<double>&, double);
+    int get_disarray_id_from_id_pair(int, int);
+
+
 private:
     int input_data_dim;
     double threshold;
