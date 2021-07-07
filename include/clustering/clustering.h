@@ -24,6 +24,16 @@ class Cluster
     };
     typedef std::vector<Cluster> Clusters;
 
+class FullCluster
+    {
+    public:
+        std::vector<double> distance;
+        std::vector<int> member_id;
+    private:
+    };
+    typedef std::vector<FullCluster> FullClusters;
+
+
     Clustering(void);
 
     void executor(const double);
@@ -37,8 +47,7 @@ class Cluster
     std::vector<int> get_id_from_distance_array_id(const int);
     void change_id(Clusters& input_data, const std::vector<int>);
 
-    void full_clustering(Clusters& input_data, std::vector<double>&);
-    std::vector<double> serchi_min_max_distance(std::vector<double>&, double);
+    void full_clustering(Clusters&, FullClusters&, std::vector<double>&);
     int get_disarray_id_from_id_pair(int, int);
 
 
@@ -50,6 +59,7 @@ private:
     std::vector<int> cluster_num;
 
     Clusters input_data;
+    FullClusters full_clusters;
 };
 
 #endif
