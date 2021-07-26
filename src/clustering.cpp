@@ -167,8 +167,197 @@ std::vector<int> Clustering::get_id_from_distance_array_id(int index)
 
 void Clustering::full_clustering(Clusters &input_data, FullClusters &full_clusters, std::vector<double> &cluster_distance)
 {
-    
+    FullCluster temp;
+    for(int i=0;i<input_data.size();i++){
+        temp.member_id.push_back(i);
+        for(int j=0;j<input_data.size();j++){
+            if(i == j){
+                temp.distance.push_back(0);
+                std::cout << " " << temp.distance[0];
+
+            }
+            else{
+                int index = get_disarray_id_from_id_pair(i, j);
+                temp.distance.push_back(cluster_distance[index]);
+                std::cout << " " << cluster_distance[index];
+            }
+        }
+        std::cout << std::endl;
+        full_clusters.push_back(temp);
+        temp.member_id.clear();
+        temp.distance.clear();
+    }
+
+    std::cout << "==show full cluster data==" << std::endl;
+    for(int i=0;i<full_clusters.size();i++){
+        std::cout << "id : " << full_clusters[i].member_id[0]<< " || ";
+        for(int j=0;j<full_clusters.size();j++){
+            std::cout << std::fixed << std::setprecision(3) << " " << full_clusters[i].distance[j] << " " ;
+        }
+        std::cout << std::endl;
+    }
+
+    std::cout << "input member id size : " << full_clusters[0].member_id.size() << std::endl; 
+
+
+    std::vector<int> min_dis_id;
+    min_dis_id.resize(2);
+    min_dis_id = serchi_min_dis_from_fullclusters();
+    std::cout << "min dis id = " << min_dis_id[0] << " "<< min_dis_id[1] << std::endl;
+
+    FullClusters next_step;
+    next_step = create_new_clusters(min_dis_id);
+
+    std::cout << "==show next cluster data==" << std::endl;
+
+    std::cout << "next dis seize : " << next_step[0].distance.size() << std::endl;
+    for(int i=0; i<next_step.size();i++){
+            std::cout << "show input " << std::endl;
+            std::cout << " id : ";
+            for(int j=0; j<next_step[i].member_id.size();j++){
+                std::cout << next_step[i].member_id[j]<<" " ;
+            }
+            std::cout << std::endl;
+            std::cout << " dis : " ;
+            for(int j=0; j<next_step[i].distance.size();j++){
+                std::cout << next_step[i].distance[j]<<" " ;
+            }
+            std::cout<<std::endl;
+    }
+
 }
+
+std::vector<int> Clustering::serchi_min_dis_from_fullclusters()
+{
+    std::vector<int> min_id;
+    min_id.resize(2);
+
+    if(full_clusters.size() > 1){
+        double min_distance = full_clusters[0].distance[1];
+        for(int i=0;i<full_clusters.size();i++){
+            for(int j=0;j<full_clusters.size();j++){
+
+                if(i == j){
+                    std::cout << "skip"<<std::endl;
+                }
+
+                else if(min_distance > full_clusters[i].distance[j]){
+                    min_distance = full_clusters[i].distance[j];
+                    min_id[0] = i;
+                    min_id[1] = j;
+                }
+            }
+        }
+    }
+    return min_id;
+}
+
+std::vector<Clustering::FullCluster> Clustering::create_new_clusters(std::vector<int> pair_id)
+{
+    FullCluster temp;
+    FullClusters next_clusters;
+    for(int i=0; i<full_clusters.size();i++){
+        if(i == pair_id[0]){
+            std::cout << "||== " << i << " ==||" <<std::endl;
+            for(int j = 0 ; j<full_clusters.size() ;j++){
+                if(j==i){
+                    temp.distance.push_back(0);
+                }
+                else if(j == pair_id[1]){
+                    std::cout << " pattern B dis = 0" << std::endl;
+                }
+                else{
+                    double dis = full_clusters[i].distance[j];
+                        if(dis < full_clusters[pair_id[1]].distance[j]){
+                            dis = full_clusters[pair_id[1]].distance[j];
+                        }
+                    temp.distance.push_back(dis);
+                    std::cout << " pattern A dis = " << dis << std::endl;
+                }
+            }
+
+            // temp.member_id.clear();
+
+            std::cout << " dis : " ;
+            for(int j=0; j<temp.distance.size();j++){
+                std::cout << temp.distance[j]<<" " ;
+            }
+            std::cout<<std::endl;
+
+            for(int j=0; j<full_clusters[i].member_id.size();j++){
+                temp.member_id.push_back(full_clusters[i].member_id[j]);
+            }
+
+            temp.member_id.push_back(pair_id[1]);
+            next_clusters.push_back(temp);
+
+            int id = next_clusters.size() -1 ;
+            std::cout << "show input " << std::endl;
+            std::cout << " id : ";
+            for(int j=0; j<next_clusters[id].member_id.size();j++){
+                std::cout << next_clusters[id].member_id[j]<<" " ;
+            }
+            std::cout << std::endl;
+            std::cout << " dis : " ;
+            for(int j=0; j<temp.distance.size();j++){
+                std::cout << next_clusters[id].distance[j]<<" " ;
+            }
+            std::cout<<std::endl;
+        }
+
+        else if(i == pair_id[1]){
+        }
+
+        else{
+            if(i != pair_id[0]){
+                std::cout << "==== " << i << " ====" <<std::endl;
+                for(int j = 0 ; j<full_clusters.size() ;j++){
+                    temp.member_id.push_back(i);
+                    if(j == pair_id[0]){
+                        double dis = full_clusters[i].distance[j];
+                            if(dis < full_clusters[i].distance[pair_id[1]]){
+                                dis = full_clusters[i].distance[pair_id[1]];
+                            }
+                        temp.distance.push_back(dis);
+
+                        std::cout << " pattern A dis = " << dis << std::endl;
+                    }
+                    else if(j ==pair_id[1]){
+                        std::cout << " pattern B dis = 0" << std::endl;
+                    }
+                    else{
+                        temp.distance.push_back(full_clusters[i].distance[j]);
+                        std::cout << " pattern C dis = " << full_clusters[i].distance[j] << std::endl;
+                    }
+                }
+                temp.member_id.clear();
+
+                for(int j=0; j<full_clusters[i].member_id.size();j++){
+                    temp.member_id.push_back(full_clusters[i].member_id[j]);
+                }
+                next_clusters.push_back(temp);
+
+            int id = next_clusters.size() -1 ;
+            std::cout << "show input " << std::endl;
+            std::cout << " id : ";
+            for(int j=0; j<next_clusters[id].member_id.size();j++){
+                std::cout << next_clusters[id].member_id[j]<<" " ;
+            }
+            std::cout << std::endl;
+            std::cout << " dis : " ;
+            for(int j=0; j<temp.distance.size();j++){
+                std::cout << next_clusters[id].distance[j]<<" " ;
+            }
+            std::cout<<std::endl;
+
+            }
+        }
+        temp.distance.clear();
+        temp.member_id.clear();
+    }
+    return next_clusters;
+}
+
 
 int Clustering::get_disarray_id_from_id_pair(int id_a, int id_b)
 {

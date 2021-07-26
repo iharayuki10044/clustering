@@ -7,6 +7,7 @@
 #include <cmath>
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 
 //#include "Eigen/Geometry"
 
@@ -49,6 +50,8 @@ class FullCluster
 
     void full_clustering(Clusters&, FullClusters&, std::vector<double>&);
     int get_disarray_id_from_id_pair(int, int);
+    std::vector<int> serchi_min_dis_from_fullclusters();
+    std::vector<FullCluster> create_new_clusters(std::vector<int>);
 
 
 private:
